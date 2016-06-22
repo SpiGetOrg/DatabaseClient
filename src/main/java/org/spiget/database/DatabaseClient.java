@@ -55,7 +55,7 @@ public class DatabaseClient {
 
 	public UpdateResult updateResource(ListedResource resource) {
 		Document document = DatabaseParser.toDocument(SpigetGson.RESOURCE.toJsonTree(resource));
-		return getResourcesCollection().updateOne(new Document("_id", resource.getId()), document);
+		return getResourcesCollection().updateOne(new Document("_id", resource.getId()), new Document("$set", document));
 	}
 
 	public void insertResource(ListedResource resource) {
@@ -74,7 +74,7 @@ public class DatabaseClient {
 
 	public UpdateResult updateAuthor(ListedAuthor author) {
 		Document document = DatabaseParser.toDocument(SpigetGson.AUTHOR.toJsonTree(author));
-		return getAuthorsCollection().updateOne(new Document("_id", author.getId()), document);
+		return getAuthorsCollection().updateOne(new Document("_id", author.getId()), new Document("$set", document));
 	}
 
 	public void insertAuthor(ListedAuthor author) {
