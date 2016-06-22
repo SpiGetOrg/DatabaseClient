@@ -7,6 +7,7 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.log4j.Log4j2;
 import org.bson.Document;
@@ -85,7 +86,7 @@ public class DatabaseClient {
 	// Status
 
 	public UpdateResult updateStatus(String key, Object value) {
-		return getStatusCollection().updateOne(new Document("key", key), new Document("$set", new Document("value", value)));
+		return getStatusCollection().updateOne(new Document("key", key), new Document("$set", new Document("key", key).append("value", value)), new UpdateOptions().upsert(true));
 	}
 
 	public ServerAddress connect(int timeout) throws IOException {
