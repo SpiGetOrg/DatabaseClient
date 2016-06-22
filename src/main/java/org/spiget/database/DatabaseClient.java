@@ -82,6 +82,12 @@ public class DatabaseClient {
 		getAuthorsCollection().insertOne(document);
 	}
 
+	// Status
+
+	public UpdateResult updateStatus(String key, Object value) {
+		return getStatusCollection().updateOne(new Document("_key", key), new Document("$set", new Document("value", value)));
+	}
+
 	public ServerAddress connect(int timeout) throws IOException {
 		if (mongoClient == null) {
 			log.info("Connecting to MongoDB " + this.host + ":" + this.port + "...");
@@ -116,8 +122,8 @@ public class DatabaseClient {
 		return db().getCollection("categories");
 	}
 
-	public MongoCollection<Document> getStatsCollection() {
-		return db().getCollection("stats");
+	public MongoCollection<Document> getStatusCollection() {
+		return db().getCollection("status");
 	}
 
 	public MongoCollection<Document> getWebhooksCollection() {
