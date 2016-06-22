@@ -85,7 +85,7 @@ public class DatabaseClient {
 	// Status
 
 	public UpdateResult updateStatus(String key, Object value) {
-		return getStatusCollection().updateOne(new Document("_key", key), new Document("$set", new Document("value", value)));
+		return getStatusCollection().updateOne(new Document("key", key), new Document("$set", new Document("value", value)));
 	}
 
 	public ServerAddress connect(int timeout) throws IOException {
