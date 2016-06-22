@@ -1,4 +1,4 @@
-package org.spiget;
+package org.spiget.database;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

@@ -1,4 +1,4 @@
-package org.spiget;
+package org.spiget.database;
 
 import com.google.gson.JsonObject;
 import com.mongodb.MongoClient;
@@ -17,11 +17,6 @@ import org.spiget.data.resource.Resource;
 
 import java.io.IOException;
 import java.util.Collections;
-
-import static org.spiget.DatabaseParser.toDocument;
-import static org.spiget.DatabaseParser.toJson;
-import static org.spiget.SpigetGson.AUTHOR;
-import static org.spiget.SpigetGson.RESOURCE;
 
 @Log4j2
 public class DatabaseClient {
@@ -54,17 +49,17 @@ public class DatabaseClient {
 	public Resource getResource(int id) {
 		Document document = getResourcesCollection().find(new Document("_id", id)).limit(1).first();
 		if (document == null) { return null; }
-		JsonObject json = toJson(document);
-		return RESOURCE.fromJson(json, Resource.class);
+		JsonObject json = DatabaseParser.toJson(document);
+		return SpigetGson.RESOURCE.fromJson(json, Resource.class);
 	}
 
 	public UpdateResult updateResource(ListedResource resource) {
-		Document document = toDocument(RESOURCE.toJsonTree(resource));
+		Document document = DatabaseParser.toDocument(SpigetGson.RESOURCE.toJsonTree(resource));
 		return getResourcesCollection().updateOne(new Document("_id", resource.getId()), document);
 	}
 
 	public void insertResource(ListedResource resource) {
-		Document document = toDocument(RESOURCE.toJsonTree(resource));
+		Document document = DatabaseParser.toDocument(SpigetGson.RESOURCE.toJsonTree(resource));
 		getResourcesCollection().insertOne(document);
 	}
 
@@ -73,17 +68,17 @@ public class DatabaseClient {
 	public Author getAuthor(int id) {
 		Document document = getAuthorsCollection().find(new Document("_id", id)).limit(1).first();
 		if (document == null) { return null; }
-		JsonObject json = toJson(document);
-		return AUTHOR.fromJson(json, Author.class);
+		JsonObject json = DatabaseParser.toJson(document);
+		return SpigetGson.AUTHOR.fromJson(json, Author.class);
 	}
 
 	public UpdateResult updateAuthor(ListedAuthor author) {
-		Document document = toDocument(AUTHOR.toJsonTree(author));
+		Document document = DatabaseParser.toDocument(SpigetGson.AUTHOR.toJsonTree(author));
 		return getAuthorsCollection().updateOne(new Document("_id", author.getId()), document);
 	}
 
 	public void insertAuthor(ListedAuthor author) {
-		Document document = toDocument(AUTHOR.toJsonTree(author));
+		Document document = DatabaseParser.toDocument(SpigetGson.AUTHOR.toJsonTree(author));
 		getAuthorsCollection().insertOne(document);
 	}
 

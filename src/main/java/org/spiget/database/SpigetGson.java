@@ -1,4 +1,4 @@
-package org.spiget;
+package org.spiget.database;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
