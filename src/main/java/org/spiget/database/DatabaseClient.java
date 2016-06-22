@@ -13,6 +13,8 @@ import lombok.extern.log4j.Log4j2;
 import org.bson.Document;
 import org.spiget.data.author.Author;
 import org.spiget.data.author.ListedAuthor;
+import org.spiget.data.category.Category;
+import org.spiget.data.category.ListedCategory;
 import org.spiget.data.resource.ListedResource;
 import org.spiget.data.resource.Resource;
 
@@ -81,6 +83,25 @@ public class DatabaseClient {
 	public void insertAuthor(ListedAuthor author) {
 		Document document = DatabaseParser.toDocument(SpigetGson.AUTHOR.toJsonTree(author));
 		getAuthorsCollection().insertOne(document);
+	}
+
+	// Category
+
+	public Category getCategory(int id) {
+		Document document = getCategoriesCollection().find(new Document("_id", id)).limit(1).first();
+		if (document == null) { return null; }
+		JsonObject json = DatabaseParser.toJson(document);
+		return SpigetGson.CATEGORY.fromJson(json, Category.class);
+	}
+
+	public UpdateResult updateCategory(ListedCategory category) {
+		Document document = DatabaseParser.toDocument(SpigetGson.CATEGORY.toJsonTree(category));
+		return getCategoriesCollection().updateOne(new Document("_id", category.getId()), new Document("$set", document));
+	}
+
+	public void insertCategory(ListedCategory category) {
+		Document document = DatabaseParser.toDocument(SpigetGson.CATEGORY.toJsonTree(category));
+		getCategoriesCollection().insertOne(document);
 	}
 
 	// Status
