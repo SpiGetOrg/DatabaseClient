@@ -57,13 +57,18 @@ public class DatabaseClient {
 	}
 
 	public UpdateResult updateResource(ListedResource resource) {
+		long unix = System.currentTimeMillis() / 1000;
 		Document document = DatabaseParser.toDocument(SpigetGson.RESOURCE.toJsonTree(resource));
-		return getResourcesCollection().updateOne(new Document("_id", resource.getId()), new Document("$set", document));
+		return getResourcesCollection().updateOne(new Document("_id", resource.getId()), new Document("$set", document
+				.append("fetch", new Document("latest", unix))));
 	}
 
 	public void insertResource(ListedResource resource) {
+		long unix = System.currentTimeMillis() / 1000;
 		Document document = DatabaseParser.toDocument(SpigetGson.RESOURCE.toJsonTree(resource));
-		getResourcesCollection().insertOne(document);
+		getResourcesCollection().insertOne(document
+				.append("fetch", new Document("latest", unix)
+						.append("first", unix)));
 	}
 
 	// Author
@@ -76,13 +81,18 @@ public class DatabaseClient {
 	}
 
 	public UpdateResult updateAuthor(ListedAuthor author) {
+		long unix = System.currentTimeMillis() / 1000;
 		Document document = DatabaseParser.toDocument(SpigetGson.AUTHOR.toJsonTree(author));
-		return getAuthorsCollection().updateOne(new Document("_id", author.getId()), new Document("$set", document));
+		return getAuthorsCollection().updateOne(new Document("_id", author.getId()), new Document("$set", document
+				.append("fetch", new Document("latest", unix))));
 	}
 
 	public void insertAuthor(ListedAuthor author) {
+		long unix = System.currentTimeMillis() / 1000;
 		Document document = DatabaseParser.toDocument(SpigetGson.AUTHOR.toJsonTree(author));
-		getAuthorsCollection().insertOne(document);
+		getAuthorsCollection().insertOne(document
+				.append("fetch", new Document("latest", unix)
+						.append("first", unix)));
 	}
 
 	// Category

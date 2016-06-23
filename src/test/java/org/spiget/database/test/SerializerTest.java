@@ -11,8 +11,8 @@ import org.spiget.database.SpigetGson;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+
 
 public class SerializerTest {
 
@@ -32,11 +32,11 @@ public class SerializerTest {
 		JsonObject authorObject = jsonObject.getAsJsonObject("author");
 		JsonObject categoryObject = jsonObject.getAsJsonObject("category");
 
-		assertTrue(authorObject.has("id"));
+		assertTrue(authorObject.has("$id"));
 		assertFalse(authorObject.has("name"));
 		assertFalse(authorObject.has("icon"));
 
-		assertTrue(categoryObject.has("id"));
+		assertTrue(categoryObject.has("$id"));
 		assertFalse(categoryObject.has("name"));
 	}
 

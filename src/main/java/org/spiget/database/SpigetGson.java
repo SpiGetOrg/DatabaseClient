@@ -8,8 +8,8 @@ import org.spiget.data.category.ListedCategory;
 public class SpigetGson {
 
 	public static final Gson RESOURCE = new GsonBuilder()
-			.registerTypeHierarchyAdapter(ListedAuthor.class, new IdOnlySerializer())
-			.registerTypeHierarchyAdapter(ListedCategory.class, new IdOnlySerializer())
+			.registerTypeHierarchyAdapter(ListedAuthor.class, new DbRefSerializer("authors"))
+			.registerTypeHierarchyAdapter(ListedCategory.class, new DbRefSerializer("categories"))
 			.create();
 
 	public static final Gson AUTHOR = new GsonBuilder()
