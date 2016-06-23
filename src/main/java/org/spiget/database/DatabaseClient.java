@@ -17,6 +17,7 @@ import org.spiget.data.category.Category;
 import org.spiget.data.category.ListedCategory;
 import org.spiget.data.resource.ListedResource;
 import org.spiget.data.resource.Resource;
+import org.spiget.data.resource.version.ListedResourceVersion;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -69,6 +70,13 @@ public class DatabaseClient {
 		getResourcesCollection().insertOne(document
 				.append("fetch", new Document("latest", unix)
 						.append("first", unix)));
+	}
+
+	// Resource Versions
+
+	public UpdateResult updateOrInsertVersion(ListedResource resource, ListedResourceVersion version) {
+		Document document = DatabaseParser.toDocument(SpigetGson.RESOURCE_VERSION.toJsonTree(version));
+		return getResourceVersionsCollection().updateOne(new Document("_id", version.getId()), new Document("$set", document), new UpdateOptions().upsert(true));
 	}
 
 	// Author
@@ -148,6 +156,10 @@ public class DatabaseClient {
 
 	public MongoCollection<Document> getResourcesCollection() {
 		return db().getCollection("resources");
+	}
+
+	public MongoCollection<Document> getResourceVersionsCollection() {
+		return db().getCollection("resource_versions");
 	}
 
 	public MongoCollection<Document> getCategoriesCollection() {
