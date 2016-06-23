@@ -21,7 +21,7 @@ public class SerializerTest {
 		Resource resource = new Resource(1234, "a resource");
 		resource.setAuthor(new Author(6643, "inventivetalent"));
 		resource.setCategory(new Category(1, "fake category"));
-		resource.setVersion(new ResourceVersion("1.0"));
+		resource.setVersion(new ResourceVersion(0,"1.0"));
 
 		String jsonString = SpigetGson.RESOURCE.toJson(resource);
 		JsonObject jsonObject = new JsonParser().parse(jsonString).getAsJsonObject();
