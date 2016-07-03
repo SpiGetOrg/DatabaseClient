@@ -130,6 +130,12 @@ public class DatabaseClient {
 		getCategoriesCollection().insertOne(document);
 	}
 
+	public UpdateResult updateOrInsertCategory(ListedCategory category) {
+		Document document = DatabaseParser.toDocument(SpigetGson.CATEGORY.toJsonTree(category));
+		return getResourceVersionsCollection().updateOne(new Document("_id", category.getId()), new Document("$set", document), new UpdateOptions().upsert(true));
+	}
+
+
 	// Status
 
 	public UpdateResult updateStatus(String key, Object value) {
