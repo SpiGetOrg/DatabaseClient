@@ -5,6 +5,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.UpdateOptions;
@@ -19,9 +20,12 @@ import org.spiget.data.resource.ListedResource;
 import org.spiget.data.resource.Resource;
 import org.spiget.data.resource.update.ResourceUpdate;
 import org.spiget.data.resource.version.ListedResourceVersion;
+import org.spiget.data.webhook.Webhook;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Log4j2
 public class DatabaseClient {
@@ -135,11 +139,34 @@ public class DatabaseClient {
 		return getCategoriesCollection().updateOne(new Document("_id", category.getId()), new Document("$set", document), new UpdateOptions().upsert(true));
 	}
 
-
 	// Status
 
 	public UpdateResult updateStatus(String key, Object value) {
 		return getStatusCollection().updateOne(new Document("key", key), new Document("$set", new Document("key", key).append("value", value)), new UpdateOptions().upsert(true));
+	}
+
+	// Webhook
+
+	public Set<Webhook> getWebhooks(String eventType) {
+		MongoCollection<Document> collection = getWebhooksCollection();
+		FindIterable<Document> iterable = eventType == null ? collection.find() : collection.find(new Document("events", eventType));
+		Set<Webhook> set = new HashSet<>();
+		if (iterable != null) {
+			for (Document document : iterable) {
+				set.add(SpigetGson.WEBHOOK.fromJson(DatabaseParser.toJson(document), Webhook.class));
+			}
+		}
+		return set;
+	}
+
+	public void updateWebhookConnectionCount(Webhook webhook) {
+		MongoCollection<Document> collection = getWebhooksCollection();
+		collection.updateOne(new Document("_id", webhook.id), new Document("$set", new Document("failedConnections", webhook.failedConnections)));
+	}
+
+	public void deleteWebhook(Webhook webhook) {
+		MongoCollection<Document> collection = getWebhooksCollection();
+		collection.deleteOne(new Document("_id", webhook.id));
 	}
 
 	public ServerAddress connect(int timeout) throws IOException {

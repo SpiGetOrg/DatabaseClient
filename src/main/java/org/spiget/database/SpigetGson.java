@@ -28,4 +28,7 @@ public class SpigetGson {
 	public static final Gson CATEGORY = new GsonBuilder()
 			.create();
 
+	public static final Gson WEBHOOK = new GsonBuilder()
+			.create();
+
 }
