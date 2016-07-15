@@ -159,9 +159,12 @@ public class DatabaseClient {
 		return set;
 	}
 
-	public void updateWebhookConnectionCount(Webhook webhook) {
+	public void updateWebhookStatus(Webhook webhook) {
 		MongoCollection<Document> collection = getWebhooksCollection();
-		collection.updateOne(new Document("_id", webhook.id), new Document("$set", new Document("failedConnections", webhook.failedConnections)));
+		collection.updateOne(new Document("_id", webhook.id),
+				new Document("$set",
+						new Document("failedConnections", webhook.failedConnections)
+								.append("failStatus", webhook.failStatus)));
 	}
 
 	public void deleteWebhook(Webhook webhook) {
