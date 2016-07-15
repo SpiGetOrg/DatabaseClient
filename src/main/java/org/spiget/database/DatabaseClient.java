@@ -194,32 +194,47 @@ public class DatabaseClient {
 		return mongoDatabase;
 	}
 
+	public MongoCollection<Document> authorsCollection;
+	public MongoCollection<Document> resourcesCollection;
+	public MongoCollection<Document> resourceVersionsCollection;
+	public MongoCollection<Document> resourceUpdatesCollection;
+	public MongoCollection<Document> categoriesCollection;
+	public MongoCollection<Document> statusCollection;
+	public MongoCollection<Document> webhooksCollection;
+
 	public MongoCollection<Document> getAuthorsCollection() {
-		return db().getCollection("authors");
+		if (authorsCollection != null) { return authorsCollection; }
+		return authorsCollection = db().getCollection("authors");
 	}
 
 	public MongoCollection<Document> getResourcesCollection() {
-		return db().getCollection("resources");
+		if (resourcesCollection != null) { return resourcesCollection; }
+		return resourcesCollection = db().getCollection("resources");
 	}
 
 	public MongoCollection<Document> getResourceVersionsCollection() {
-		return db().getCollection("resource_versions");
+		if (resourceVersionsCollection != null) { return resourceVersionsCollection; }
+		return resourceVersionsCollection = db().getCollection("resource_versions");
 	}
 
 	public MongoCollection<Document> getResourceUpdatesCollection() {
-		return db().getCollection("resource_updates");
+		if (resourceUpdatesCollection != null) { return resourceUpdatesCollection; }
+		return resourceUpdatesCollection = db().getCollection("resource_updates");
 	}
 
 	public MongoCollection<Document> getCategoriesCollection() {
-		return db().getCollection("categories");
+		if (categoriesCollection != null) { return categoriesCollection; }
+		return categoriesCollection = db().getCollection("categories");
 	}
 
 	public MongoCollection<Document> getStatusCollection() {
-		return db().getCollection("status");
+		if (statusCollection != null) { return statusCollection; }
+		return statusCollection = db().getCollection("status");
 	}
 
 	public MongoCollection<Document> getWebhooksCollection() {
-		return db().getCollection("webhooks");
+		if (webhooksCollection != null) { return webhooksCollection; }
+		return webhooksCollection = db().getCollection("webhooks");
 	}
 
 }
