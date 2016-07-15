@@ -45,9 +45,9 @@ public class DatabaseClient {
 		this.credential = MongoCredential.createScramSha1Credential(user, authDatabase, pass);
 	}
 
-	public int databaseCount() {
+	public int collectionCount() {
 		int c = 0;
-		for (String s : mongoClient.listDatabaseNames()) {
+		for (String s : db().listCollectionNames()) {
 			c++;
 		}
 		return c;
