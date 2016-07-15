@@ -47,7 +47,7 @@ public class DatabaseClient {
 
 	public int collectionCount() {
 		int c = 0;
-		for (String s : db().listCollectionNames()) {
+		for (String ignored : db().listCollectionNames()) {
 			c++;
 		}
 		return c;
