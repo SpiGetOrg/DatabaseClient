@@ -115,6 +115,11 @@ public class DatabaseClient {
 						.append("first", unix)));
 	}
 
+	public UpdateResult updateOrInsertAuthor(ListedAuthor author) {
+		Document document = DatabaseParser.toDocument(SpigetGson.AUTHOR.toJsonTree(author));
+		return getAuthorsCollection().updateOne(new Document("_id", author.getId()), new Document("$set", document), new UpdateOptions().upsert(true));
+	}
+
 	// Category
 
 	public Category getCategory(int id) {
