@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.spiget.data.author.ListedAuthor;
 import org.spiget.data.category.ListedCategory;
+import org.spiget.data.resource.ResourceReview;
 import org.spiget.data.resource.update.ResourceUpdate;
 import org.spiget.data.resource.version.ListedResourceVersion;
 
@@ -14,6 +15,7 @@ public class SpigetGson {
 			.registerTypeHierarchyAdapter(ListedCategory.class, new DbRefSerializer("categories"))
 			.registerTypeHierarchyAdapter(ListedResourceVersion.class, new DbRefSerializer("resource_versions"))
 			.registerTypeHierarchyAdapter(ResourceUpdate.class, new DbRefSerializer("resource_updates"))
+			.registerTypeHierarchyAdapter(ResourceReview.class, new DbRefSerializer("resource_reviews"))
 			.create();
 
 	public static final Gson RESOURCE_VERSION = new GsonBuilder()
