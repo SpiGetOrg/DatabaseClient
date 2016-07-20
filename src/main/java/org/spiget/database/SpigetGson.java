@@ -25,6 +25,7 @@ public class SpigetGson {
 			.create();
 
 	public static final Gson RESOURCE_REVIEW = new GsonBuilder()
+			.registerTypeHierarchyAdapter(ListedAuthor.class, new DbRefSerializer("authors"))
 			.create();
 
 	public static final Gson AUTHOR = new GsonBuilder()
