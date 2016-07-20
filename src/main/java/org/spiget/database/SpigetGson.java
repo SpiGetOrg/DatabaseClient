@@ -11,11 +11,11 @@ import org.spiget.data.resource.version.ListedResourceVersion;
 public class SpigetGson {
 
 	public static final Gson RESOURCE = new GsonBuilder()
-			.registerTypeHierarchyAdapter(ListedAuthor.class, new DbRefSerializer("authors"))
-			.registerTypeHierarchyAdapter(ListedCategory.class, new DbRefSerializer("categories"))
-			.registerTypeHierarchyAdapter(ListedResourceVersion.class, new DbRefSerializer("resource_versions"))
-			.registerTypeHierarchyAdapter(ResourceUpdate.class, new DbRefSerializer("resource_updates"))
-			.registerTypeHierarchyAdapter(ResourceReview.class, new DbRefSerializer("resource_reviews"))
+			.registerTypeHierarchyAdapter(ListedAuthor.class, new IdOnlySerializer())
+			.registerTypeHierarchyAdapter(ListedCategory.class, new IdOnlySerializer())
+			.registerTypeHierarchyAdapter(ListedResourceVersion.class, new IdOnlySerializer())
+			.registerTypeHierarchyAdapter(ResourceUpdate.class, new IdOnlySerializer())
+			.registerTypeHierarchyAdapter(ResourceReview.class, new IdOnlySerializer())
 			.create();
 
 	public static final Gson RESOURCE_VERSION = new GsonBuilder()
@@ -25,7 +25,7 @@ public class SpigetGson {
 			.create();
 
 	public static final Gson RESOURCE_REVIEW = new GsonBuilder()
-			.registerTypeHierarchyAdapter(ListedAuthor.class, new DbRefSerializer("authors"))
+			.registerTypeHierarchyAdapter(ListedAuthor.class, new IdOnlySerializer())
 			.create();
 
 	public static final Gson AUTHOR = new GsonBuilder()
