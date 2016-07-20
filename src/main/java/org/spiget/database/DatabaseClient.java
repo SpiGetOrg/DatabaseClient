@@ -18,6 +18,7 @@ import org.spiget.data.category.Category;
 import org.spiget.data.category.ListedCategory;
 import org.spiget.data.resource.ListedResource;
 import org.spiget.data.resource.Resource;
+import org.spiget.data.resource.ResourceReview;
 import org.spiget.data.resource.update.ResourceUpdate;
 import org.spiget.data.resource.version.ListedResourceVersion;
 import org.spiget.data.webhook.Webhook;
@@ -89,6 +90,13 @@ public class DatabaseClient {
 	public UpdateResult updateOrInsertUpdate(ListedResource resource, ResourceUpdate update) {
 		Document document = DatabaseParser.toDocument(SpigetGson.RESOURCE_UPDATE.toJsonTree(update));
 		return getResourceUpdatesCollection().updateOne(new Document("_id", update.getId()), new Document("$set", document), new UpdateOptions().upsert(true));
+	}
+
+	// Resource Reviews
+
+	public UpdateResult updateOrInsertReview(ListedResource resource, ResourceReview review) {
+		Document document = DatabaseParser.toDocument(SpigetGson.RESOURCE_REVIEW.toJsonTree(review));
+		return getResourceReviewsCollection().updateOne(new Document("_id", review.getId()), new Document("$set", document), new UpdateOptions().upsert(true));
 	}
 
 	// Author
@@ -203,6 +211,7 @@ public class DatabaseClient {
 	public MongoCollection<Document> resourcesCollection;
 	public MongoCollection<Document> resourceVersionsCollection;
 	public MongoCollection<Document> resourceUpdatesCollection;
+	public MongoCollection<Document> resourceReviewsCollection;
 	public MongoCollection<Document> categoriesCollection;
 	public MongoCollection<Document> statusCollection;
 	public MongoCollection<Document> webhooksCollection;
@@ -225,6 +234,11 @@ public class DatabaseClient {
 	public MongoCollection<Document> getResourceUpdatesCollection() {
 		if (resourceUpdatesCollection != null) { return resourceUpdatesCollection; }
 		return resourceUpdatesCollection = db().getCollection("resource_updates");
+	}
+
+	public MongoCollection<Document> getResourceReviewsCollection() {
+		if (resourceReviewsCollection != null) { return resourceReviewsCollection; }
+		return resourceReviewsCollection = db().getCollection("resource_reviews");
 	}
 
 	public MongoCollection<Document> getCategoriesCollection() {

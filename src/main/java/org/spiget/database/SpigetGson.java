@@ -22,6 +22,9 @@ public class SpigetGson {
 	public static final Gson RESOURCE_UPDATE = new GsonBuilder()
 			.create();
 
+	public static final Gson RESOURCE_REVIEW = new GsonBuilder()
+			.create();
+
 	public static final Gson AUTHOR = new GsonBuilder()
 			.create();
 
