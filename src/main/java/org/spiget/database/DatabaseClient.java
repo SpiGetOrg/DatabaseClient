@@ -24,6 +24,8 @@ import org.spiget.data.resource.version.ListedResourceVersion;
 import org.spiget.data.webhook.Webhook;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryUsage;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -52,6 +54,21 @@ public class DatabaseClient {
 			c++;
 		}
 		return c;
+	}
+
+	public void updateSystemStats(String prefix) {
+		Runtime runtime = Runtime.getRuntime();
+		MemoryUsage heapMemoryUsage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
+
+		long maxMemory = runtime.maxMemory();
+		long allocatedMemory = runtime.totalMemory();
+		long freeMemory = runtime.freeMemory();
+
+		updateStatus(prefix + "system.memory.max", (maxMemory / 1024));
+		updateStatus(prefix + "system.memory.free", (freeMemory / 1024));
+		updateStatus(prefix + "system.memory.allocated", (allocatedMemory / 1024));
+		updateStatus(prefix + "system.memory.used", (heapMemoryUsage.getUsed() / 1024));
+		updateStatus(prefix + "system.memory.committed", (heapMemoryUsage.getCommitted() / 1024));
 	}
 
 	// Resource
