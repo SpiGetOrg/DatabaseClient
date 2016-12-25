@@ -202,6 +202,12 @@ public class DatabaseClient {
 		collection.deleteOne(new Document("_id", webhook.id));
 	}
 
+	// Metrics
+	public void insertMetricsData(JsonObject data) {
+		Document document = DatabaseParser.toDocument(data);
+		getMetricsCollection().insertOne(document);
+	}
+
 	public ServerAddress connect(int timeout) throws IOException {
 		if (mongoClient == null) {
 			log.info("Connecting to MongoDB " + this.host + ":" + this.port + "...");
@@ -232,6 +238,7 @@ public class DatabaseClient {
 	public MongoCollection<Document> categoriesCollection;
 	public MongoCollection<Document> statusCollection;
 	public MongoCollection<Document> webhooksCollection;
+	public MongoCollection<Document> metricsCollection;
 
 	public MongoCollection<Document> getAuthorsCollection() {
 		if (authorsCollection != null) { return authorsCollection; }
@@ -271,6 +278,11 @@ public class DatabaseClient {
 	public MongoCollection<Document> getWebhooksCollection() {
 		if (webhooksCollection != null) { return webhooksCollection; }
 		return webhooksCollection = db().getCollection("webhooks");
+	}
+
+	public MongoCollection<Document> getMetricsCollection() {
+		if (metricsCollection != null) { return metricsCollection; }
+		return metricsCollection = db().getCollection("metrics");
 	}
 
 }
