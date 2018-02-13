@@ -12,6 +12,7 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.log4j.Log4j2;
 import org.bson.Document;
+import org.spiget.data.UpdateRequest;
 import org.spiget.data.author.Author;
 import org.spiget.data.author.ListedAuthor;
 import org.spiget.data.category.Category;
@@ -208,6 +209,24 @@ public class DatabaseClient {
 		getMetricsCollection().insertOne(document);
 	}
 
+	// Update Requests
+	public Set<UpdateRequest> getUpdateRequests() {
+		MongoCollection<Document> collection = getUpdateRequestsCollection();
+		FindIterable<Document> iterable = collection.find();
+		Set<UpdateRequest> set = new HashSet<>();
+		if (iterable != null) {
+			for (Document document : iterable) {
+				set.add(SpigetGson.UPDATE_REQUEST.fromJson(DatabaseParser.toJson(document), UpdateRequest.class));
+			}
+		}
+		return set;
+	}
+
+	public void deleteUpdateRequest(UpdateRequest request) {
+		MongoCollection<Document> collection=getUpdateRequestsCollection();
+		collection.deleteOne(new Document("requestedId", request.getRequestedId()));
+	}
+
 	public ServerAddress connect(int timeout) throws IOException {
 		if (mongoClient == null) {
 			log.info("Connecting to MongoDB " + this.host + ":" + this.port + "...");
@@ -239,6 +258,7 @@ public class DatabaseClient {
 	public MongoCollection<Document> statusCollection;
 	public MongoCollection<Document> webhooksCollection;
 	public MongoCollection<Document> metricsCollection;
+	public MongoCollection<Document> updateRequestsCollection;
 
 	public MongoCollection<Document> getAuthorsCollection() {
 		if (authorsCollection != null) { return authorsCollection; }
@@ -283,6 +303,11 @@ public class DatabaseClient {
 	public MongoCollection<Document> getMetricsCollection() {
 		if (metricsCollection != null) { return metricsCollection; }
 		return metricsCollection = db().getCollection("metrics");
+	}
+
+	public MongoCollection<Document> getUpdateRequestsCollection() {
+		if (updateRequestsCollection != null) { return updateRequestsCollection; }
+		return updateRequestsCollection = db().getCollection("update_requests");
 	}
 
 }

@@ -37,4 +37,7 @@ public class SpigetGson {
 	public static final Gson WEBHOOK = new GsonBuilder()
 			.create();
 
+	public static final Gson UPDATE_REQUEST = new GsonBuilder()
+			.create();
+
 }
