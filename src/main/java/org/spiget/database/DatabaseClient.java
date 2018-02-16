@@ -96,6 +96,11 @@ public class DatabaseClient {
 						.append("first", unix)));
 	}
 
+	public void deleteResource(ListedResource resource) {
+		MongoCollection<Document> collection = getResourcesCollection();
+		collection.deleteOne(new Document("_id", resource.id));
+	}
+
 	// Resource Versions
 
 	public UpdateResult updateOrInsertVersion(ListedResource resource, ListedResourceVersion version) {
@@ -223,7 +228,7 @@ public class DatabaseClient {
 	}
 
 	public void deleteUpdateRequest(UpdateRequest request) {
-		MongoCollection<Document> collection=getUpdateRequestsCollection();
+		MongoCollection<Document> collection = getUpdateRequestsCollection();
 		collection.deleteOne(new Document("requestedId", request.getRequestedId()));
 	}
 
