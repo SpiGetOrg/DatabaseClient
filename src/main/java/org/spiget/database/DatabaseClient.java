@@ -96,9 +96,9 @@ public class DatabaseClient {
 						.append("first", unix)));
 	}
 
-	public void deleteResource(ListedResource resource) {
+	public void deleteResource(int id) {
 		MongoCollection<Document> collection = getResourcesCollection();
-		collection.deleteOne(new Document("_id", resource.id));
+		collection.deleteOne(new Document("_id", id));
 	}
 
 	// Resource Versions
