@@ -229,7 +229,7 @@ public class DatabaseClient {
 
 	public void deleteUpdateRequest(UpdateRequest request) {
 		MongoCollection<Document> collection = getUpdateRequestsCollection();
-		collection.deleteOne(new Document("requestedId", request.getRequestedId()));
+		collection.deleteMany(new Document("requestedId", request.getRequestedId()));
 	}
 
 	public ServerAddress connect(int timeout) throws IOException {
