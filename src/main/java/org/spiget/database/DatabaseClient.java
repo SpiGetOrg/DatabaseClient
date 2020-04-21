@@ -1,6 +1,7 @@
 package org.spiget.database;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
@@ -8,9 +9,11 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Level;
 import org.bson.Document;
 import org.spiget.data.UpdateRequest;
 import org.spiget.data.author.Author;
@@ -217,11 +220,18 @@ public class DatabaseClient {
 	// Update Requests
 	public Set<UpdateRequest> getUpdateRequests(int limit) {
 		MongoCollection<Document> collection = getUpdateRequestsCollection();
-		FindIterable<Document> iterable = collection.find().limit(limit);
+		FindIterable<Document> iterable = collection.find().projection(Projections.fields(Projections.exclude("requested"))).limit(limit);
 		Set<UpdateRequest> set = new HashSet<>();
 		if (iterable != null) {
 			for (Document document : iterable) {
-				set.add(SpigetGson.UPDATE_REQUEST.fromJson(DatabaseParser.toJson(document), UpdateRequest.class));
+				JsonObject json = DatabaseParser.toJson(document);
+				try {
+					set.add(SpigetGson.UPDATE_REQUEST.fromJson(json, UpdateRequest.class));
+				} catch (JsonSyntaxException e) {
+					log.log(Level.WARN, "Failed to parse UpdateRequest "+document.getObjectId("_id")+" to from json", e);
+					log.warn(json.toString());
+					throw e;
+				}
 			}
 		}
 		return set;
