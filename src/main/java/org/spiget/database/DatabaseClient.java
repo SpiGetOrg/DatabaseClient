@@ -184,6 +184,10 @@ public class DatabaseClient {
 		return getStatusCollection().updateOne(new Document("key", key), new Document("$set", new Document("key", key).append("value", value)), new UpdateOptions().upsert(true));
 	}
 
+	public UpdateResult renameStatus(String fromKey, String toKey) {
+		return getStatusCollection().updateOne(new Document("key", fromKey), new Document("$set", new Document("key", toKey)));
+	}
+
 	// Webhook
 
 	public Set<Webhook> getWebhooks(String eventType) {
