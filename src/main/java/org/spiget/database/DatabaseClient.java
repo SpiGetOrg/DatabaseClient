@@ -184,14 +184,14 @@ public class DatabaseClient {
 		return getStatusCollection().updateOne(new Document("key", key), new Document("$set", new Document("key", key).append("value", value)), new UpdateOptions().upsert(true));
 	}
 
-	public <T> T getStatus(String key) {
+	public <T> T getStatus(String key, T def) {
 		FindIterable<Document> documents = getStatusCollection().find(new Document("key", key)).limit(1);
 		if (documents != null) {
 			for (Document document : documents) {
 				return (T) document.get("value");
 			}
 		}
-		return null;
+		return def;
 	}
 
 	public UpdateResult renameStatus(String fromKey, String toKey) {
