@@ -13,7 +13,7 @@ public class SpigetGson {
 	public static final Gson RESOURCE = new GsonBuilder()
 			.registerTypeHierarchyAdapter(ListedAuthor.class, new IdOnlySerializer())
 			.registerTypeHierarchyAdapter(ListedCategory.class, new IdOnlySerializer())
-			.registerTypeHierarchyAdapter(ListedResourceVersion.class, new IdOnlySerializer())
+			.registerTypeHierarchyAdapter(ListedResourceVersion.class, new IdAndUuidSerializer())
 			.registerTypeHierarchyAdapter(ResourceUpdate.class, new IdOnlySerializer())
 			.registerTypeHierarchyAdapter(ResourceReview.class, new IdOnlySerializer())
 			.create();
