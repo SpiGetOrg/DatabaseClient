@@ -12,6 +12,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
+import io.sentry.Sentry;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.bson.Document;
@@ -242,6 +243,7 @@ public class DatabaseClient {
 				try {
 					set.add(SpigetGson.UPDATE_REQUEST.fromJson(json, UpdateRequest.class));
 				} catch (JsonSyntaxException e) {
+					Sentry.captureException(e);
 					log.log(Level.WARN, "Failed to parse UpdateRequest "+document.getObjectId("_id")+" to from json", e);
 					log.warn(json.toString());
 					throw e;
@@ -259,7 +261,10 @@ public class DatabaseClient {
 	public ServerAddress connect(int timeout) throws IOException {
 		if (mongoClient == null) {
 			log.info("Connecting to MongoDB " + this.host + ":" + this.port + "...");
-			mongoClient = new MongoClient(new ServerAddress(this.host, this.port), Collections.singletonList(this.credential), MongoClientOptions.builder().connectTimeout(timeout).build());
+			mongoClient = new MongoClient(new ServerAddress(this.host, this.port), Collections.singletonList(this.credential), MongoClientOptions.builder()
+					.connectTimeout(timeout)
+					.socketTimeout(10000)
+					.build());
 		}
 		return mongoClient.getAddress();
 	}

@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>bson</artifactId>
-            <version>3.0.4</version>
+            <version>3.12.7</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -57,6 +57,11 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.sentry</groupId>
+            <artifactId>sentry</artifactId>
+            <version>3.1.0</version>
         </dependency>
     </dependencies>
 
