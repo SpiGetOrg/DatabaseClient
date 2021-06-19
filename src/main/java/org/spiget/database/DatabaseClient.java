@@ -235,7 +235,7 @@ public class DatabaseClient {
 	// Update Requests
 	public Set<UpdateRequest> getUpdateRequests(int limit) {
 		MongoCollection<Document> collection = getUpdateRequestsCollection();
-		FindIterable<Document> iterable = collection.find().projection(Projections.fields(Projections.exclude("requested"))).limit(limit);
+		FindIterable<Document> iterable = collection.find().sort(new Document("requested", 1)).projection(Projections.fields(Projections.exclude("requested"))).limit(limit);
 		Set<UpdateRequest> set = new HashSet<>();
 		if (iterable != null) {
 			for (Document document : iterable) {
