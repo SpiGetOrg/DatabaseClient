@@ -2,10 +2,8 @@ package org.spiget.database;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.mongodb.*;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.MongoCredential;
+import com.mongodb.client.*;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
@@ -28,7 +26,6 @@ import org.spiget.data.webhook.Webhook;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -262,22 +259,11 @@ public class DatabaseClient {
         collection.deleteMany(new Document("requestedId", request.getRequestedId()));
     }
 
-    public ServerAddress connect(int timeout) throws IOException {
+    public void connect(int timeout) {
         if (mongoClient == null) {
-            if (this.url != null) {
                 log.info("Connecting to MongoDB...");
-                mongoClient = new MongoClient(new MongoClientURI(this.url, MongoClientOptions.builder()
-                        .connectTimeout(timeout)
-                        .socketTimeout(10000)));
-            } else {
-                log.info("Connecting to MongoDB " + this.host + ":" + this.port + "...");
-                mongoClient = new MongoClient(new ServerAddress(this.host, this.port), Collections.singletonList(this.credential), MongoClientOptions.builder()
-                        .connectTimeout(timeout)
-                        .socketTimeout(10000)
-                        .build());
-            }
+                mongoClient = MongoClients.create(this.url);
         }
-        return mongoClient.getAddress();
     }
 
     public void disconnect() throws IOException {
