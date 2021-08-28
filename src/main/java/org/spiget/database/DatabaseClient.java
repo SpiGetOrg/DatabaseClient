@@ -42,8 +42,9 @@ public class DatabaseClient {
     private MongoClient mongoClient;
     private MongoDatabase mongoDatabase;
 
-    public DatabaseClient(String url) {
+    public DatabaseClient(String url, String dbName) {
         this.url = url;
+        this.dbName = dbName;
     }
 
     @Deprecated
